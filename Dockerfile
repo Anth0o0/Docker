@@ -1,3 +1,4 @@
+This Dockerfile is with comments but you can't build it ( # puts errors )
 FROM focal	#initialisation of the image based on focal
 
 # LABEL about the custom image

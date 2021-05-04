@@ -24,7 +24,7 @@ RUN sudo add-apt-repository universe # packages' installation
 # update and upgrade the packages
 RUN apt-get -y update && apt-get -y upgrade
 # Install necessary packages to run crosstool-ng
-RUN apt-get install -y gcc g++ bison flex textinfo install-info info make \
+RUN apt-get install -y gcc g++ bison flex texinfo install-info info make \
 libncurses5-dev python3-dev autoconf automake libtool libtool-bin gawk bzip2 xz-utils patch libstdc++6 rsync git unzip help2man 
 
 # install dumb init

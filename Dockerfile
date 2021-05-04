@@ -25,18 +25,19 @@ RUN apt-get -y update && apt-get -y upgrade
 # Install necessary packages to run crosstool-ng
 RUN apt-get install -y gcc g++ bison flex textinfo install-info info make \
 libncurses5-dev python3-dev autoconf automake libtool libtool-bin gawk bzip2 xz-utils patch libstdc++6 rsync git unzip help2man 
+
 # install dumb init
+RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.1/dumb-init_1.2.1_amd64 && \
+echo "057ecd4ac1d3c3be31f82fc0848bf77b1326a975b4f8423fe31607205a0fe945  /usr/local/bin/dumb-init" | sha256sum -c - && \
+chmod 755 /usr/local/bin/dumb-init # give file's permissions
 
-# Install Dumb-init
-
-RUN wget -O /sbin/dumb-init https://github.com/Yelp/dumb-init/   #install bumb init
-RUN chmod a+x /sbin/dumb-init   #give file's permissions
 RUN echo 'export PATH=/opt/ctng/bin:$PATH' >> /etc/profile
 ENTRYPOINT [ "/usr/local/bin/dumb-init", "--" ]
 
-# Login with user 
+# Login with user ctng
 USER ctng
 WORKDIR /home/ctng
+
 # Download and install the latest version of crosstool-ng
 RUN git clone -b master --single-branch --depth 1 \
     https://github.com/crosstool-ng/crosstool-ng.git ct-ng
@@ -44,9 +45,11 @@ WORKDIR /home/ctng/ct-ng
 RUN ./bootstrap
 ENV PATH=/home/ctng/.local/bin:$PATH
 COPY ${CONFIG_FILE} config
-# Build ct-ng
-RUN ./configure --enable-local
 
+# Build ct-ng
+RUN ./configure --prefix=/home/ctng/.local
+RUN make 
+RUN make install 
 ENV TOOLCHAIN_PATH=/home/dev/x-tools/${CONFIG_FILE}
 ENV PATH=${TOOLCHAIN_PATH}/bin:$PATH
 

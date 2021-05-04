@@ -16,7 +16,7 @@ ARG CTNG_GID=1000
 ARG CONFIG_FILE
 # Crosstool-ng must be executed from a user that isn't the superuser (root)
 # You must create a user and add it to the sudoer group
-RUN groupadd -g $CTNG_GID ctng && useradd -d /home/ctng -m -g $CTNG_GID -u $CTNG_UID -s /bin/bash ctng  # creation of a new user and give sudo' s access
+RUN groupadd -g $CTNG_GID ctng && useradd -d /home/crosstool-ng -m -g $CTNG_GID -u $CTNG_UID -s /bin/bash ctng  # creation of a new user and give sudo' s access
 RUN apt-get -y install software-properties-common # install the ad-apt commands
 # On ubuntu, lookup the command add-apt-repository and the repos universe and multiverse?
 RUN sudo add-apt-repository universe # packages' installation
@@ -34,20 +34,20 @@ chmod 755 /usr/local/bin/dumb-init # give file's permissions
 RUN echo 'export PATH=/opt/ctng/bin:$PATH' >> /etc/profile
 ENTRYPOINT [ "/usr/local/bin/dumb-init", "--" ]
 
-# Login with user ctng
-USER ctng
-WORKDIR /home/ctng
+# Login with user crosstool-ng
+USER crosstool-ng
+WORKDIR /home/crosstool-ng
 
 # Download and install the latest version of crosstool-ng
 RUN git clone -b master --single-branch --depth 1 \
     https://github.com/crosstool-ng/crosstool-ng.git ct-ng
-WORKDIR /home/ctng/ct-ng
+WORKDIR /home/crosstool-ng/ct-ng
 RUN ./bootstrap
-ENV PATH=/home/ctng/.local/bin:$PATH
+ENV PATH=/home/crosstool-ng/.local/bin:$PATH
 COPY ${CONFIG_FILE} config
 
-# Build ct-ng
-RUN ./configure --prefix=/home/ctng/.local
+# Build user crosstool-ng
+RUN ./configure --prefix=/home/crosstool-ng/.local
 RUN make 
 RUN make install 
 ENV TOOLCHAIN_PATH=/home/dev/x-tools/${CONFIG_FILE}

@@ -6,6 +6,7 @@ The goal of this lab was to create a Docker image (container) and install a cros
 
 You can build with this command : " docker build -t 'crosstool-ng:latest' ."
 You should have something like this in your terminal:
+
 ![image](https://user-images.githubusercontent.com/72147223/116995807-d0270c00-acda-11eb-93a9-6ca78d6400a7.png)
 
 Now, you can run it: " docker run -t crosstool-ng "

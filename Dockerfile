@@ -17,7 +17,7 @@ ARG CTNG_GID=1000
 ARG CONFIG_FILE
 # Crosstool-ng must be executed from a user that isn't the superuser (root)
 # You must create a user and add it to the sudoer group
-RUN groupadd -g $CTNG_GID ctng && useradd -d /home/crosstool-ng -m -g $CTNG_GID -u $CTNG_UID -s /bin/bash ctng  # creation of a new user and give sudo' s access
+RUN groupadd -g $CTNG_GID ctng && useradd -d /home/crosstool-ng -m -g $CTNG_GID -u $CTNG_UID -s /bin/bash crosstool-ng  # creation of a new user and give sudo' s access
 RUN apt-get -y install software-properties-common # install the ad-apt commands
 # On ubuntu, lookup the command add-apt-repository and the repos universe and multiverse?
 RUN sudo add-apt-repository universe # packages' installation
